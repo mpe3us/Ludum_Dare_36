@@ -1,0 +1,31 @@
+== Ancient Technology ==
+
+- The Quest for the rounded wheel:
+  * Rouge-like strategy game
+  * A world where everything is squared. But your people have heard the legendary tale of the rounded
+    wheel, so you set out on a quest for the rounded wheel! However, you're not only one who's after the
+    new groundbreaking technology.
+  * Cube map
+  * Warriors and workers
+  * Move between areas where you stay for the whole day, and move on during the night
+  * In each area you gather resources, figthing barbarians, meeting new people which can recruit and so on
+  * You move around in a square wheeled vehicle, which deploys it self as a mobile city in each area 
+  * If all members (villagers?) of your team dies, or you mobile base gets destroyed, you lose the game
+  * Upgrades: You can upgrade your crew and base - only during an actual map, or/and as you move between areas?
+  * Resource types:
+    - Food: Determines how many villagers you can use in the given area, as each villager needs food for being active that day
+    - Coal: Used as fuel to the mobile base (each area has coal travel cost)
+    - Gold: Used for trading and bribing
+    - Wood and Iron: Used for upgrading the base and equipment of the villagers
+
+
+Implementation plan:
+- The basic map
+- The base
+- The villagers
+- Resources + gathering
+- Enemies + fighting
+- Map overview between areas + victory/loss conditions
+- Upgrades
+- Improve the map to make it more interesting
+- Randomized events
