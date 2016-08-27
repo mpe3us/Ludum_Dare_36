@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tool {
-
+public interface ISelectableObject {
 
 
 }

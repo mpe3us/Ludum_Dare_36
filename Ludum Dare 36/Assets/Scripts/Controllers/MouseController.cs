@@ -20,6 +20,8 @@ public class MouseController : MonoBehaviour {
 	public Vector3 MousePositionOnMap { get; private set;}
 	bool rayAlreadyHitCubeThisUpdate;
 
+	private bool newGameObjectSelectedThisUpdate;
+
 	void Awake() {
 
 		if (Instance != null) {
@@ -37,6 +39,7 @@ public class MouseController : MonoBehaviour {
 		this.mouseRayHits = Physics.RaycastAll (this.mouseRay, 100.0f);
 
 		this.rayAlreadyHitCubeThisUpdate = false;
+		this.newGameObjectSelectedThisUpdate = false;
 
 		foreach (RaycastHit hit in this.mouseRayHits) {
 			this.MouseOverNewObject (hit.transform.gameObject, hit);
@@ -73,8 +76,9 @@ public class MouseController : MonoBehaviour {
 
 	private void HandleLeftClick(bool clearEarlierSelections = true) {
 
-		if (this.MouseOverGameObject == null) {
+		if (this.MouseOverGameObject == null || !this.newGameObjectSelectedThisUpdate) {
 			this.ClearSelectedVillagers();
+			GameUIController.Instance.ClearSelection ();
 			return;
 		}
 
@@ -110,11 +114,14 @@ public class MouseController : MonoBehaviour {
 	}
 
 	private void MouseOverNewSelectableObject(GameObject go) {
+		this.newGameObjectSelectedThisUpdate = true;
+
 		if (this.MouseOverGameObject == go) {
 			return;
 		}
 
 		this.MouseOverGameObject = go;
+		GameUIController.Instance.MouseOverNewObject (go);
 	}
 
 	private void MouseOverNewCube(GameObject go, RaycastHit hitInfo) {

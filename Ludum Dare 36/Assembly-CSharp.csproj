@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\Controllers\CameraController.cs" />
      <Compile Include="Assets\Scripts\Controllers\CubeMapController.cs" />
      <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\GameUIController.cs" />
      <Compile Include="Assets\Scripts\Controllers\HomeBaseController.cs" />
      <Compile Include="Assets\Scripts\Controllers\MouseController.cs" />
      <Compile Include="Assets\Scripts\Controllers\UnitController.cs" />
@@ -61,6 +62,8 @@
      <Compile Include="Assets\Scripts\DataModel\Tool.cs" />
      <Compile Include="Assets\Scripts\DataModel\Unit.cs" />
      <Compile Include="Assets\Scripts\DataModel\Villager.cs" />
+     <Compile Include="Assets\Scripts\GameObjects\UnitInfoPanel.cs" />
+     <Compile Include="Assets\Scripts\Interfaces\ISelectableObject.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>F:/Programmer/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
