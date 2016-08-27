@@ -20,10 +20,10 @@
 
 
 Implementation plan:
-- The basic map
-- The base
-- The villagers
-- Resources + gathering
+- The basic map - DONE
+- The base - kinda done
+- The villagers - kinda done
+- Resources + gathering - in progress
 - Enemies + fighting
 - Map overview between areas + victory/loss conditions
 - Upgrades

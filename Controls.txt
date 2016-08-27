@@ -1,0 +1,7 @@
+Camera control: 
+- Movement: 'WASD' keys or arrow keys
+- Rotate: 'Q' and 'E'
+
+Selection units:
+- Left click to select a Villager
+- After selecting a villager, right click to move him around  

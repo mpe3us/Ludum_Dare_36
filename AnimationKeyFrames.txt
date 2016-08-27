@@ -1,4 +1,4 @@
 Idle: 1-100 (loop)
 Run: 130-150 (loop)
 Hit: 160-185 (no loop?)
-Two-handed ()
+Two-handed: 200-250 (loop)

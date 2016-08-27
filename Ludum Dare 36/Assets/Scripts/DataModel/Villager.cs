@@ -11,7 +11,7 @@ public class Villager : Unit {
 
 		this.Name = "Villager";
 
-		if (Random.Range (0, 1) == 0) {
+		if (Random.Range (0, 2) == 0) {
 			this.AttackPower += Random.Range (3, 11);
 			this.GatheringSkill += Random.Range (0, 3);
 		} else {

@@ -22,6 +22,12 @@ public class MouseController : MonoBehaviour {
 
 	private bool newGameObjectSelectedThisUpdate;
 
+	[SerializeField]
+	private GameObject selectionIndicatorPrefab;
+
+	[SerializeField]
+	private Color activeSelectionColor;
+
 	void Awake() {
 
 		if (Instance != null) {
@@ -51,6 +57,12 @@ public class MouseController : MonoBehaviour {
 		else if (Input.GetMouseButtonUp(1)) {
 			this.HandleRightClick ();
 		}
+
+		// Used to reset mouse over indicator
+		if (!this.newGameObjectSelectedThisUpdate && this.MouseOverGameObject != null) {
+			this.MouseOverGameObject = null;
+		}
+
 	}
 
 	private void HandleRightClick() {
@@ -85,9 +97,9 @@ public class MouseController : MonoBehaviour {
 		if (this.MouseOverGameObject.tag == "Villager") {
 			if (clearEarlierSelections) {
 				this.ClearSelectedVillagers ();
-				this.SelectedVillagers.Add (this.MouseOverGameObject);
+				this.AddSelectedVillagerObject (this.MouseOverGameObject);
 			} else {
-				this.SelectedVillagers.Add (this.MouseOverGameObject);
+				this.AddSelectedVillagerObject (this.MouseOverGameObject);
 			}
 		} else {
 			// Clear selected objects
@@ -95,7 +107,18 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
+	private void AddSelectedVillagerObject(GameObject go) {
+		this.SelectedVillagers.Add (go);
+		go.GetComponentInParent<UnitController> ().SelectionIndicator = Instantiate (this.selectionIndicatorPrefab, GameUIController.Instance.transform) as GameObject;
+		go.GetComponentInParent<UnitController> ().SelectionIndicator.GetComponent<SelectionIndicator> ().SetObjectToFollow (go, this.activeSelectionColor);
+	}
+
 	private void ClearSelectedVillagers() {
+		foreach (GameObject go in this.SelectedVillagers) {
+			if (go.GetComponentInParent<UnitController> ().SelectionIndicator != null) {
+				Destroy (go.GetComponentInParent<UnitController> ().SelectionIndicator);
+			}
+		}
 		this.SelectedVillagers.Clear ();
 		this.SelectedVillagers = new List<GameObject> ();
 	}

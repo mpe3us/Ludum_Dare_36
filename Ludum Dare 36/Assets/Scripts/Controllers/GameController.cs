@@ -18,6 +18,11 @@ public class GameController : MonoBehaviour {
 
 	public Dictionary<int, GameObject> VillagerGameObjects { get; private set; }
 
+	public List<GameObject> resourceObjects;
+
+	[SerializeField]
+	private GameObject foodResourcePrefab;
+
 	void Awake() {
 
 		if (Instance != null) {
@@ -38,6 +43,8 @@ public class GameController : MonoBehaviour {
 
 		this.InitBaseAtPosition ();
 		this.InitVillagers ();
+		ResourcePoolController.Instance.SetResourceData (this.GameData.ResourcePoolData);
+		this.SpawnResources ();
 	}
 
 	public void InitBaseAtPosition() {
@@ -74,16 +81,27 @@ public class GameController : MonoBehaviour {
 				this.baseGO.transform.position.y, 
 				this.baseGO.transform.position.z + randZ);
 		}
+	}
+
+	public void SpawnResources() {
+
+		foreach (GameObject go in this.resourceObjects) {
+			Destroy (go);
+		}
+
+		int foodResources = Random.Range (0, this.GameData.CurrentLevel+2);
+	
+		Debug.Log ("Number of food resources: " + foodResources);
+
+		for (int i = 0; i < foodResources; i++) {
+			GameObject curResource = Instantiate (this.foodResourcePrefab, this.transform) as GameObject;
+			curResource.transform.position = CubeMapController.Instance.GetRandomCubeGO ().transform.position;
+			curResource.transform.Rotate (0, Random.Range (0, 360), 0);
+			curResource.GetComponent<ResourceController> ().SetResourceData (ResourcePool.ResourceTypes.FOOD, Random.Range (1, 7), "Food", ResourcePoolController.foodColor);
+			this.resourceObjects.Add (curResource);
+		}
 
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

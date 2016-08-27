@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Controllers\GameUIController.cs" />
      <Compile Include="Assets\Scripts\Controllers\HomeBaseController.cs" />
      <Compile Include="Assets\Scripts\Controllers\MouseController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\ResourceController.cs" />
      <Compile Include="Assets\Scripts\Controllers\UnitController.cs" />
      <Compile Include="Assets\Scripts\DataModel\Apparel.cs" />
      <Compile Include="Assets\Scripts\DataModel\Cube.cs" />
@@ -59,9 +60,13 @@
      <Compile Include="Assets\Scripts\DataModel\Game.cs" />
      <Compile Include="Assets\Scripts\DataModel\HomeBase.cs" />
      <Compile Include="Assets\Scripts\DataModel\IAttackableObject.cs" />
+     <Compile Include="Assets\Scripts\DataModel\ResourcePool.cs" />
      <Compile Include="Assets\Scripts\DataModel\Tool.cs" />
      <Compile Include="Assets\Scripts\DataModel\Unit.cs" />
      <Compile Include="Assets\Scripts\DataModel\Villager.cs" />
+     <Compile Include="Assets\Scripts\GameObjects\ResourceInfoPanel.cs" />
+     <Compile Include="Assets\Scripts\GameObjects\ResourcePoolController.cs" />
+     <Compile Include="Assets\Scripts\GameObjects\SelectionIndicator.cs" />
      <Compile Include="Assets\Scripts\GameObjects\UnitInfoPanel.cs" />
      <Compile Include="Assets\Scripts\Interfaces\ISelectableObject.cs" />
  <Reference Include="UnityEngine.UI">

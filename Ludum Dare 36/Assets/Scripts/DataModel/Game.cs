@@ -8,9 +8,17 @@ public class Game  {
 
 	public Dictionary<int, Villager> VillagersDict { get; private set; }
 
+	public ResourcePool ResourcePoolData { get; private set; }
+
+	public int CurrentLevel;
+
 	public Game() {
 
+		this.CurrentLevel = 1;
+
 		this.HomeBaseData = new HomeBase ();
+
+		this.ResourcePoolData = new ResourcePool ();
 
 		this.VillagersDict = new Dictionary<int, Villager> ();
 
@@ -20,6 +28,10 @@ public class Game  {
 			VillagersDict.Add (curVillager.UnitID, curVillager);
 		}
 
+	}
+
+	public void LoadNextLevel() {
+		this.CurrentLevel++;
 	}
 
 }

@@ -16,6 +16,8 @@ public class UnitController : MonoBehaviour {
 
 	private RaycastHit[] mouseRayHits;
 
+	public GameObject SelectionIndicator { get; set; }
+
 	void Awake() {
 		this.IsMovingTowardsTarget = false;
 	}
@@ -51,6 +53,8 @@ public class UnitController : MonoBehaviour {
 				Quaternion rotation = Quaternion.LookRotation (direction);
 				float curRotAngle = rotation.eulerAngles.y;
 				float oldAngle = this.transform.localEulerAngles.y;
+
+				curRotAngle += 180.0f; // FIXME: Needed because of wrong model rotation
 
 				if (oldAngle - curRotAngle > 180.0f) {
 					curRotAngle -= 360.0f;

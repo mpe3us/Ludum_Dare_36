@@ -62,9 +62,9 @@ public class CubeMap {
 
 		return returnCube;
 
-
-
 	}
+
+
 
 
 

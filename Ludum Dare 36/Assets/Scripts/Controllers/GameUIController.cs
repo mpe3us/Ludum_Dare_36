@@ -17,8 +17,13 @@ public class GameUIController : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject selectedUnitPrefab;
+	[SerializeField]
+	private GameObject selectedResourcePrefab;
 
 	private GameObject curSelectedObject;
+
+	[SerializeField]
+	private GameObject resourcePoolPanel;
 
 	void Awake() {
 		if (Instance != null) {
@@ -42,9 +47,18 @@ public class GameUIController : MonoBehaviour {
 
 		if (go.GetComponentInParent<UnitController> () != null) {
 			UnitController curController = go.GetComponentInParent<UnitController> ();
-			this.selectedObjectNameText.text = curController.UnitData.Name;
+			this.selectedObjectNameText.text = curController.UnitData.Name.ToUpper ();
+			this.selectedObjectNameText.color = Color.white; 
 			this.currentObjectInfo = Instantiate (this.selectedUnitPrefab, this.selectedObjectParent.transform) as GameObject;
 			this.currentObjectInfo.GetComponent<UnitInfoPanel> ().SetUnitData (curController.UnitData);
+			this.currentObjectInfo.transform.position = this.selectedObjectParent.transform.position;
+			this.selectedObjectPanel.SetActive (true);
+		} else if (go.GetComponentInParent<ResourceController> () != null) {
+			ResourceController curController = go.GetComponentInParent<ResourceController> ();
+			this.selectedObjectNameText.text = curController.Name.ToUpper();
+			this.selectedObjectNameText.color = curController.ResColor;
+			this.currentObjectInfo = Instantiate (this.selectedResourcePrefab, this.selectedObjectParent.transform) as GameObject;
+			this.currentObjectInfo.GetComponent<ResourceInfoPanel> ().SetResourceData (curController);
 			this.currentObjectInfo.transform.position = this.selectedObjectParent.transform.position;
 			this.selectedObjectPanel.SetActive (true);
 		}

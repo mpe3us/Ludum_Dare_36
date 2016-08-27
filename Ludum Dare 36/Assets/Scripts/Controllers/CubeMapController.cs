@@ -55,9 +55,6 @@ public class CubeMapController : MonoBehaviour {
 		}
 
 		return returnCube;
-
-
-
 	}
 
 	// Use this for initialization
@@ -76,4 +73,27 @@ public class CubeMapController : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+	public GameObject GetRandomCubeGO () {
+
+		int randX;
+		int randY;
+
+		if (Random.Range (0, 2) == 0) {
+			randX = Random.Range (10, (this.CubeMapData.Width / 2) - 4); 
+		} else {
+			randX = Random.Range ((this.CubeMapData.Width / 2) + 4, this.CubeMapData.Width - 10); 
+		}
+
+		if (Random.Range (0, 2) == 0) {
+			randY = Random.Range (10, (this.CubeMapData.Depth / 2) - 4); 
+		} else {
+			randY = Random.Range ((this.CubeMapData.Depth / 2) + 4, this.CubeMapData.Depth - 10); 
+		}
+
+		return this.CubeGameObjects [randX, randY];
+
+
+		}
 }
