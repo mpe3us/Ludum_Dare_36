@@ -5,7 +5,7 @@ public class ResourcePool {
 
 	public enum ResourceTypes
 	{
-		FOOD, COAL, GOLD, WOOD, IRON
+		UNDEFINED, FOOD, COAL, GOLD, WOOD, IRON
 	}
 
 	public int FoodPool { get; private set; }

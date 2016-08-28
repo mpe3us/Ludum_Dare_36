@@ -69,11 +69,48 @@ public class MouseController : MonoBehaviour {
 
 		// TODO: Check that we don't have the mouse over another gameobject which has HandleRight click behavior
 
-		if (this.MouseOverCube != null) {
+		bool actionPerformed = false;
+
+		if (this.MouseOverGameObject != null) {
+			if (this.MouseOverGameObject.tag == "Resource") {
+				actionPerformed = true;
+
+				bool firstMove = true;
+				foreach (GameObject go in this.SelectedVillagers) {
+
+					go.GetComponentInParent<UnitController> ().SetNewTargetPosition (this.MouseOverGameObject.transform.position, UnitController.ActionMode.GATHER, this.MouseOverGameObject);
+
+					if (firstMove) {
+						GameObject temp = (GameObject) Instantiate (MovementActionIndicator, this.MousePositionOnMap, Quaternion.identity);
+						Destroy (temp, 0.3f);
+					}
+
+					firstMove = false;
+				}
+			}
+			if (this.MouseOverGameObject.tag == "Base") {
+				actionPerformed = true;
+
+				bool firstMove = true;
+				foreach (GameObject go in this.SelectedVillagers) {
+
+					go.GetComponentInParent<UnitController> ().SetNewTargetPosition (GameController.Instance.BaseGO.transform.position, UnitController.ActionMode.STORE, GameController.Instance.BaseGO);
+
+					if (firstMove) {
+						GameObject temp = (GameObject) Instantiate (MovementActionIndicator, this.MousePositionOnMap, Quaternion.identity);
+						Destroy (temp, 0.3f);
+					}
+
+					firstMove = false;
+				}
+			}
+		}
+
+		if (this.MouseOverCube != null && !actionPerformed) {
 			bool firstMove = true;
 			foreach (GameObject go in this.SelectedVillagers) {
 				
-				go.GetComponentInParent<UnitController> ().SetNewTargetPosition (this.MousePositionOnMap);
+				go.GetComponentInParent<UnitController> ().SetNewTargetPosition (this.MousePositionOnMap, UnitController.ActionMode.MOVE, this.MouseOverCube);
 
 				if (firstMove) {
 					GameObject temp = (GameObject) Instantiate (MovementActionIndicator, this.MousePositionOnMap, Quaternion.identity);

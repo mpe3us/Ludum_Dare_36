@@ -7,7 +7,7 @@ public class SelectionIndicator : MonoBehaviour {
 	[SerializeField]
 	private bool followMouseOverSelectableObject = false; // If true, then this object follows the mouse over object
 
-	public GameObject ObjectToFollow { get; private set; }
+	public GameObject ObjectToFollow;
 
 	private bool objectToFollowIsSet;
 

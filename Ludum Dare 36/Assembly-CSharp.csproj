@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\DataModel\Tool.cs" />
      <Compile Include="Assets\Scripts\DataModel\Unit.cs" />
      <Compile Include="Assets\Scripts\DataModel\Villager.cs" />
+     <Compile Include="Assets\Scripts\GameObjects\BaseInfoPanel.cs" />
      <Compile Include="Assets\Scripts\GameObjects\ResourceInfoPanel.cs" />
      <Compile Include="Assets\Scripts\GameObjects\ResourcePoolController.cs" />
      <Compile Include="Assets\Scripts\GameObjects\SelectionIndicator.cs" />

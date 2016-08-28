@@ -19,6 +19,8 @@ public class GameUIController : MonoBehaviour {
 	private GameObject selectedUnitPrefab;
 	[SerializeField]
 	private GameObject selectedResourcePrefab;
+	[SerializeField]
+	private GameObject selectedBasePrefab;
 
 	private GameObject curSelectedObject;
 
@@ -55,10 +57,18 @@ public class GameUIController : MonoBehaviour {
 			this.selectedObjectPanel.SetActive (true);
 		} else if (go.GetComponentInParent<ResourceController> () != null) {
 			ResourceController curController = go.GetComponentInParent<ResourceController> ();
-			this.selectedObjectNameText.text = curController.Name.ToUpper();
+			this.selectedObjectNameText.text = curController.Name.ToUpper ();
 			this.selectedObjectNameText.color = curController.ResColor;
 			this.currentObjectInfo = Instantiate (this.selectedResourcePrefab, this.selectedObjectParent.transform) as GameObject;
 			this.currentObjectInfo.GetComponent<ResourceInfoPanel> ().SetResourceData (curController);
+			this.currentObjectInfo.transform.position = this.selectedObjectParent.transform.position;
+			this.selectedObjectPanel.SetActive (true);
+		} else if (go.GetComponentInParent<HomeBaseController> () != null) {
+			HomeBaseController curController = go.GetComponentInParent<HomeBaseController> ();
+			this.selectedObjectNameText.text = "ANCIENT WAGON";
+			this.selectedObjectNameText.color = Color.white; 
+			this.currentObjectInfo = Instantiate (this.selectedBasePrefab, this.selectedObjectParent.transform) as GameObject;
+			this.currentObjectInfo.GetComponent<BaseInfoPanel> ().SetData (curController);
 			this.currentObjectInfo.transform.position = this.selectedObjectParent.transform.position;
 			this.selectedObjectPanel.SetActive (true);
 		}

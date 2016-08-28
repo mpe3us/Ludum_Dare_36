@@ -31,18 +31,11 @@ public class CameraController : MonoBehaviour {
 
 		this.transform.Translate(Input.GetAxis("Vertical") * this.distThisFrame, 0, -Input.GetAxis("Horizontal") * this.distThisFrame);
 
-//		this.transform.Translate (Input.GetAxis("Horizontal") * this.distThisFrame, 
-//			Input.GetAxis ("Vertical") * Mathf.Sin(this.transform.rotation.eulerAngles.x * (3.14f / 180 )) * this.distThisFrame,
-//			Input.GetAxis("Vertical") * Mathf.Cos(this.transform.rotation.eulerAngles.x * (3.14f / 180)) * this.distThisFrame,
-//			Space.Self);
-
 		float rotThisFrame = this.rotationSpeed * Time.deltaTime;
 		if (Input.GetKey ("q")) {
-			//this.mainCam.transform.RotateAround (this.transform.position, Vector3.up, rotThisFrame);
 			this.transform.Rotate (0, rotThisFrame, 0);
 		}
 		else if (Input.GetKey("e")) {
-			//this.mainCam.transform.RotateAround (this.transform.position, Vector3.up, -rotThisFrame);
 			this.transform.Rotate (0, -rotThisFrame, 0);
 		}
 
@@ -52,6 +45,11 @@ public class CameraController : MonoBehaviour {
 		float curCameraAngle = rotation.eulerAngles.x;
 
 		this.mainCam.transform.localEulerAngles = new Vector3 (curCameraAngle, this.mainCam.transform.localEulerAngles.y, this.mainCam.transform.localEulerAngles.z);
+
+		if (Input.GetKeyDown ("h")) {
+			this.transform.position = new Vector3 (GameController.Instance.BaseGO.transform.position.x, 0, GameController.Instance.BaseGO.transform.position.z);
+		}
+
 	}
 
 	public void SetInitialPos(int middleX, int middleZ) {

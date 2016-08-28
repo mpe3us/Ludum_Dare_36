@@ -4,4 +4,10 @@ Camera control:
 
 Selection units:
 - Left click to select a Villager
-- After selecting a villager, right click to move him around  
+- After selecting a villager, you can:
+  * right click to move him around  
+  * right click on a resource to make him gather it
+  * right click on your home base to store the current resource
+
+Various:
+- 'h': moves camera to home base

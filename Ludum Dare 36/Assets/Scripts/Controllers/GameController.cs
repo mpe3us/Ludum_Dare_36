@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
 	[SerializeField]
 	private GameObject BasePrefab;
 
-	private GameObject baseGO;
+	public GameObject BaseGO { get; private set; }
 
 	public Game GameData { get; private set; }
 
@@ -22,6 +22,13 @@ public class GameController : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject foodResourcePrefab;
+	[SerializeField]
+	private GameObject foodResourceCubePrefab;
+
+	[SerializeField]
+	private GameObject woodResourcePrefab;
+	[SerializeField]
+	private GameObject woodResourceCubePrefab;
 
 	void Awake() {
 
@@ -50,16 +57,16 @@ public class GameController : MonoBehaviour {
 	public void InitBaseAtPosition() {
 		CubeMap cubeMap = CubeMapController.Instance.CubeMapData;
 		GameObject cubeController = CubeMapController.Instance.GetCubeGO (cubeMap.Width / 2, cubeMap.Depth / 2);
-		this.baseGO = Instantiate (this.BasePrefab, this.transform) as GameObject;
-		this.baseGO.transform.position = cubeController.transform.position;
+		this.BaseGO = Instantiate (this.BasePrefab, this.transform) as GameObject;
+		this.BaseGO.transform.position = cubeController.transform.position;
 
-		this.baseGO.GetComponent<HomeBaseController> ().SetHomeBaseData (this.GameData.HomeBaseData);
+		this.BaseGO.GetComponent<HomeBaseController> ().SetHomeBaseData (this.GameData.HomeBaseData);
 	}
 
 	public void InitVillagers () {
 		foreach (Unit curUnit in this.GameData.VillagersDict.Values) {
 			GameObject curGO = Instantiate (this.villagerPrefab, this.transform) as GameObject;
-			curGO.GetComponent<UnitController> ().SetUnitData (curUnit);
+			curGO.GetComponent<UnitController> ().SetUnitData (curUnit, this.BaseGO);
 			this.VillagerGameObjects.Add (curUnit.UnitID, curGO);
 
 			float randX;
@@ -77,9 +84,9 @@ public class GameController : MonoBehaviour {
 			}
 
 			curGO.transform.position = new Vector3 (
-				this.baseGO.transform.position.x + randX, 
-				this.baseGO.transform.position.y, 
-				this.baseGO.transform.position.z + randZ);
+				this.BaseGO.transform.position.x + randX, 
+				this.BaseGO.transform.position.y, 
+				this.BaseGO.transform.position.z + randZ);
 		}
 	}
 
@@ -97,10 +104,26 @@ public class GameController : MonoBehaviour {
 			GameObject curResource = Instantiate (this.foodResourcePrefab, this.transform) as GameObject;
 			curResource.transform.position = CubeMapController.Instance.GetRandomCubeGO ().transform.position;
 			curResource.transform.Rotate (0, Random.Range (0, 360), 0);
-			curResource.GetComponent<ResourceController> ().SetResourceData (ResourcePool.ResourceTypes.FOOD, Random.Range (1, 7), "Food", ResourcePoolController.foodColor);
+			curResource.GetComponent<ResourceController> ().SetResourceData (ResourcePool.ResourceTypes.FOOD, Random.Range (1, 7), "Food", ResourcePoolController.foodColor, this.foodResourceCubePrefab);
 			this.resourceObjects.Add (curResource);
 		}
 
+		int woodResources = Random.Range (10, 15 + (int)((float) this.GameData.CurrentLevel * 1.2f));
+
+		for (int i = 0; i < woodResources; i++) {
+			GameObject curResource = Instantiate (this.woodResourcePrefab, this.transform) as GameObject;
+			curResource.transform.position = CubeMapController.Instance.GetRandomCubeGO ().transform.position;
+			curResource.transform.Rotate (0, Random.Range (0, 360), 0);
+			curResource.GetComponent<ResourceController> ().SetResourceData (ResourcePool.ResourceTypes.WOOD, Random.Range (1, 5), "Wood", ResourcePoolController.woodColor, this.woodResourceCubePrefab);
+			this.resourceObjects.Add (curResource);
+		}
+
+	}
+
+	public void IncrementResourceOfType(ResourcePool.ResourceTypes type, int value) {
+		Debug.Log ("Incrementing Resource pool of Type: " + type);
+		this.GameData.ResourcePoolData.IncrementPool (type, value);
+		ResourcePoolController.Instance.UpdateTextFields ();
 	}
 
 
