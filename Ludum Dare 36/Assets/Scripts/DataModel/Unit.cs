@@ -16,7 +16,7 @@ public abstract class Unit {
 	public float BaseGatheringRange { get; protected set; }
 
 	public int MaxHitPoints { get; protected set; }
-	public int CurrentHitPoints { get; protected set; }
+	public int CurrentHitPoints { get; set; }
 
 	public int Armor { get; protected set; }
 
@@ -43,10 +43,10 @@ public abstract class Unit {
 
 		this.GatheringSkill = Random.Range (1, 3);
 
-		this.MaxHitPoints = Random.Range (10, 15);
+		this.MaxHitPoints = Random.Range (2, 5);
 		this.CurrentHitPoints = this.MaxHitPoints;
 
-		this.MovementSpeed = Random.Range(1,2);
+		this.MovementSpeed = 1;
 
 	}
 

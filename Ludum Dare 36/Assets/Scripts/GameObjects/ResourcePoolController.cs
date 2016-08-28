@@ -50,11 +50,11 @@ public class ResourcePoolController : MonoBehaviour {
 
 	public void UpdateTextFields() {
 	
-		food.text = "Food: " + this.ResourcePoolData.FoodPool;
-		coal.text = "Coal: " + this.ResourcePoolData.CoalPool;
-		gold.text = "Gold: " + this.ResourcePoolData.GoldPool;
-		wood.text = "Wood: " + this.ResourcePoolData.WoodPool;
-		iron.text = "Iron: " + this.ResourcePoolData.IronPool;
+		food.text = "Food: " + this.ResourcePoolData.FoodPool + "/" + this.ResourcePoolData.foodToWin;
+		coal.text = "Coal: " + this.ResourcePoolData.CoalPool + "/" + this.ResourcePoolData.coalToWin;
+		gold.text = "Gold: " + this.ResourcePoolData.GoldPool + "/" + this.ResourcePoolData.goldToWin;
+		wood.text = "Wood: " + this.ResourcePoolData.WoodPool + "/" + this.ResourcePoolData.woodToWin;
+		iron.text = "Iron: " + this.ResourcePoolData.IronPool + "/" + this.ResourcePoolData.ironToWin;
 	
 	}
 

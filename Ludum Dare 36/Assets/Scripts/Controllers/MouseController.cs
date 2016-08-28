@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour {
 
@@ -39,6 +40,14 @@ public class MouseController : MonoBehaviour {
 	}
 
 	void Update() {
+
+		if (GameController.Instance.GameOver) {
+			return;
+		}
+
+		if (EventSystem.current.IsPointerOverGameObject()) {
+			return;
+		}
 
 		this.mouseRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 
@@ -88,13 +97,29 @@ public class MouseController : MonoBehaviour {
 					firstMove = false;
 				}
 			}
-			if (this.MouseOverGameObject.tag == "Base") {
+			else if (this.MouseOverGameObject.tag == "Base") {
 				actionPerformed = true;
 
 				bool firstMove = true;
 				foreach (GameObject go in this.SelectedVillagers) {
 
 					go.GetComponentInParent<UnitController> ().SetNewTargetPosition (GameController.Instance.BaseGO.transform.position, UnitController.ActionMode.STORE, GameController.Instance.BaseGO);
+
+					if (firstMove) {
+						GameObject temp = (GameObject) Instantiate (MovementActionIndicator, this.MousePositionOnMap, Quaternion.identity);
+						Destroy (temp, 0.3f);
+					}
+
+					firstMove = false;
+				}
+			}
+			else if (this.MouseOverGameObject.tag == "Barbarian") {
+				actionPerformed = true;
+
+				bool firstMove = true;
+				foreach (GameObject go in this.SelectedVillagers) {
+
+					go.GetComponentInParent<UnitController> ().SetNewTargetPosition (this.MouseOverGameObject.transform.position, UnitController.ActionMode.ATTACK, this.MouseOverGameObject);
 
 					if (firstMove) {
 						GameObject temp = (GameObject) Instantiate (MovementActionIndicator, this.MousePositionOnMap, Quaternion.identity);

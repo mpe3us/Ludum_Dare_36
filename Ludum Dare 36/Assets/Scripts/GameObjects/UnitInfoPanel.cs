@@ -27,25 +27,40 @@ public class UnitInfoPanel : MonoBehaviour {
 	[SerializeField]
 	private Text apparel;
 
+	private int latestHP;
+
 	public void SetUnitData(Unit data) {
 		this.UnitData = data;
 
-		this.hp.text = "HP\n" + data.CurrentHitPoints.ToString() + "/" + data.MaxHitPoints.ToString();
-		this.attackPower.text = "Attack Power\n" + data.AttackPower.ToString();
-		this.gatheringSkill.text = "Gathering Skill\n" + data.GatheringSkill.ToString();
-		this.armor.text = "Armor Rating\n" + data.Armor.ToString();
-		this.movement.text = "Move. Speed\n" + data.MovementSpeed.ToString();
+		Destroy (this.tool.gameObject);
+		Destroy (this.apparel.gameObject);
 
-		if (data.EquippedTool == null) {
-			this.tool.text = "Tool\nNone";
-		}
-
-		if (data.EquippedApparel == null) {
-			this.apparel.text = "Apparal\nNone";
-		}
-
+		this.SetText ();
 	}
 
+	private void SetText() {
+		this.hp.text = "HP\n" + UnitData.CurrentHitPoints.ToString() + "/" + UnitData.MaxHitPoints.ToString();
+		latestHP = UnitData.CurrentHitPoints;
+		this.attackPower.text = "Attack Power\n" + UnitData.AttackPower.ToString();
+		this.gatheringSkill.text = "Gathering Skill\n" + UnitData.GatheringSkill.ToString();
+		this.armor.text = "Armor Rating\n" + UnitData.Armor.ToString();
+		this.movement.text = "Move. Speed\n" + UnitData.MovementSpeed.ToString();
 
+
+
+//		if (UnitData.EquippedTool == null) {
+//			this.tool.text = "Tool\nNone";
+//		}
+//
+//		if (UnitData.EquippedApparel == null) {
+//			this.apparel.text = "Apparal\nNone";
+//		}
+	}
+
+	void Update() {
+		if (latestHP != UnitData.CurrentHitPoints) {
+			this.SetText ();
+		}
+	}
 
 }

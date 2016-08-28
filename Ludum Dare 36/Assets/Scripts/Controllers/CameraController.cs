@@ -27,6 +27,10 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (GameController.Instance.GameOver) {
+			return;
+		}
+
 		this.distThisFrame = this.cameraSpeed * Time.deltaTime;
 
 		this.transform.Translate(Input.GetAxis("Vertical") * this.distThisFrame, 0, -Input.GetAxis("Horizontal") * this.distThisFrame);

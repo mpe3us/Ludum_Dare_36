@@ -19,10 +19,10 @@ public class Villager : Unit {
 			this.GatheringSkill += Random.Range (3, 11);
 		}
 
-		this.MaxHitPoints += Random.Range (0, 16);
+		this.MaxHitPoints += Random.Range (10, 25);
 		this.CurrentHitPoints = this.MaxHitPoints;
 
-		this.MovementSpeed = Random.Range (1, 4);
+		this.MovementSpeed += Random.Range (1, 4);
 
 	}
 

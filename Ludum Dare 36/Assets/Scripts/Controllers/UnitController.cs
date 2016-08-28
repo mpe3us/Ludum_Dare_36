@@ -3,10 +3,15 @@ using System.Collections;
 
 public class UnitController : MonoBehaviour {
 
-	public const float ActionRange = 1.1f;
+	public const int DamageRequiredForHPLoss = 10;
+	private int curDamageTick;
+
+	public const float ActionRange = 1.25f;
 	public const float TimeBetweenActions = 1.0f;
 
 	private float curActionTime;
+
+	public bool IsDead;
 
 	public enum ActionMode {
 		MOVE,
@@ -16,6 +21,8 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public ActionMode CurActionMode { get; private set; }
+
+	public float timeSinceLastAction;
 
 	[SerializeField]
 	private GameObject equippedTool;
@@ -46,17 +53,53 @@ public class UnitController : MonoBehaviour {
 
 	private ResourceController.ReturnResourceStruct CurrentRes;
 
+	Renderer[] rends;
+	Color[] curColors;
+
 	void Awake() {
 		this.IsMovingTowardsTarget = false;
 		this.actionModeActivated = false;
 		this.curActionTime = 1.0f;
+		this.curDamageTick = 0;
+
+		IsDead = false;
+
+		timeSinceLastAction = 0;
+
+		rends = this.GetComponentsInChildren<Renderer> ();
+		curColors = new Color[rends.Length];
+
+		// TODO: Set random colors for villagers
+
+		for (int i = 0; i < rends.Length; i++) {
+
+			if (this.tag == "Villager") {
+				if (rends [i].gameObject.name == "Body" || rends [i].gameObject.name == "LegR" || rends [i].gameObject.name == "LegL") {
+					rends [i].material.color = new Color (Random.Range (0.0f, 0.7f), Random.Range (0.0f, 1.0f), Random.Range (0.0f, 1.0f), 1.0f);
+				}
+			}
+
+			curColors [i] = rends [i].material.color;
+		}		
 	}
 
 	void Update() {
 
+		if (GameController.Instance.GameOver) {
+			return;
+		}
+
+		timeSinceLastAction += Time.deltaTime;
+
+		if (this.tag == "Barbarian" && timeSinceLastAction >= 3.0f) {
+			timeSinceLastAction = 0.0f;
+			GameController.Instance.RequestNewTarget (this);
+		}
+
 		// What action to perform
 		switch (this.CurActionMode) {
 		case ActionMode.MOVE:
+
 			break;
 		case ActionMode.GATHER:
 			if (this.CurrentTargetObject.GetComponentInParent<ResourceController>() != null) {
@@ -65,6 +108,7 @@ public class UnitController : MonoBehaviour {
 					if (this.curActionTime >= TimeBetweenActions) {
 						this.PlayAnimation ("PerformAction");
 						this.curActionTime = 0;
+						timeSinceLastAction = 0.0f;
 						this.CurrentRes = this.CurrentTargetObject.GetComponentInParent<ResourceController> ().TickResource (this);
 						if (this.CurrentRes.resPrefab != null) {
 							this.currentResource = Instantiate (this.CurrentRes.resPrefab, this.resourceSlot.transform.position, Quaternion.identity) as GameObject;
@@ -99,16 +143,38 @@ public class UnitController : MonoBehaviour {
 			}
 			break;
 		case ActionMode.ATTACK:
+			if (!this.IsMovingTowardsTarget && this.CurrentTargetObject != null) {
+				if (Vector3.Distance (this.transform.position, this.CurrentTargetObject.transform.position) > ActionRange) {
+					this.SetNewTargetPosition (this.CurrentTargetObject.transform.position, ActionMode.ATTACK, this.CurrentTargetObject);
+				} else {
+					// Attack target
+
+					// For units...
+					if (this.CurrentTargetObject.GetComponentInParent<UnitController> () != null) {
+						this.curActionTime += Time.deltaTime;
+						if (this.curActionTime >= TimeBetweenActions) {
+							this.PlayAnimation ("PerformAction");
+							this.curActionTime = 0;
+							timeSinceLastAction = 0.0f;
+							bool unitKilled = this.CurrentTargetObject.GetComponentInParent<UnitController> ().TakeDamage (this);
+							if (unitKilled) {
+								this.CurActionMode = ActionMode.MOVE;
+							}
+						}
+					}
+				}
+			}
 			break;
 		default:
 			break;
 		}
 
 		// Moving towards target
-		if (this.IsMovingTowardsTarget) {
+		if (this.IsMovingTowardsTarget && this.CurrentTargetObject != null) {
+			this.LatestTargetPosition = this.CurrentTargetObject.transform.position; // FIXME: this might screw something
 			Vector2 curPos = new Vector2 (this.transform.position.x, this.transform.position.z);
 			Vector2 targetPos = new Vector2 (this.LatestTargetPosition.x, this.LatestTargetPosition.z);
-			if (Vector2.Distance (curPos, targetPos) <= 0.1f || (this.actionModeActivated && Vector2.Distance (curPos, targetPos) <= ActionRange)) {
+			if (Vector2.Distance (curPos, targetPos) <= 0.1f || (this.actionModeActivated && Vector2.Distance (curPos, targetPos) <= ActionRange - 0.1f)) {
 				this.IsMovingTowardsTarget = false;
 				this.PlayAnimation ("Idle");
 				this.DestinationReached ();
@@ -150,7 +216,51 @@ public class UnitController : MonoBehaviour {
 
 				//this.transform.rotation = Quaternion.Lerp (this.transform.rotation, Quaternion.LookRotation (direction), Time.deltaTime * 5.0f);
 			}
+		} else {
+			// TODO: Do something here?
+			this.IsMovingTowardsTarget = false;
 		}
+	}
+
+	public bool TakeDamage(UnitController attackingUnit) {
+
+		this.curDamageTick += attackingUnit.UnitData.AttackPower;
+
+		if (this.curDamageTick >= DamageRequiredForHPLoss) {
+			this.UnitData.CurrentHitPoints -= 1;
+			this.curDamageTick -= DamageRequiredForHPLoss;
+
+			StartCoroutine (this.damageVisual ());
+
+			if (this.UnitData.CurrentHitPoints <= 0) {
+				GameController.Instance.VillagerDied ();
+				IsDead = true;
+				this.gameObject.SetActive (false);
+				return true;
+			}
+		}
+
+		if (!this.IsMovingTowardsTarget && this.CurActionMode != ActionMode.ATTACK && this.CurrentTargetObject != attackingUnit.gameObject) {
+			this.SetNewTargetPosition (attackingUnit.gameObject.transform.position, ActionMode.ATTACK, attackingUnit.gameObject, false);
+		}
+
+		return false;
+	}
+
+	private IEnumerator damageVisual() {
+		
+		for (int i = 0; i < rends.Length; i++) {
+			Renderer curRend = rends [i];
+			curRend.material.color = Color.red;
+		}
+
+		yield return new WaitForSeconds (0.2f);
+
+		for (int i = 0; i < rends.Length; i++) {
+			Renderer curRend = rends [i];	
+			curRend.material.color = curColors[i];
+		}
+
 	}
 
 	private void DestinationReached() {
@@ -172,12 +282,15 @@ public class UnitController : MonoBehaviour {
 		this.HomeBase = homeBaseGO;
 	}
 
-	public void SetNewTargetPosition(Vector3 targetPos, ActionMode newActionMode, GameObject targetObject) {
+	public void SetNewTargetPosition(Vector3 targetPos, ActionMode newActionMode, GameObject targetObject, bool walkAnim = true) {
 		this.LatestTargetPosition = targetPos;
 		this.IsMovingTowardsTarget = true;
 		this.CurActionMode = newActionMode;
 		this.CurrentTargetObject = targetObject;
-		this.PlayAnimation ("Walk");
+
+		if (walkAnim) {
+			this.PlayAnimation ("Walk");
+		}
 
 		switch (this.CurActionMode) {
 		case ActionMode.MOVE:

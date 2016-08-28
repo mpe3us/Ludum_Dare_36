@@ -14,11 +14,17 @@ public class ResourcePool {
 	public int WoodPool { get; private set; }
 	public int IronPool { get; private set; } 
 
+	public int foodToWin = 5;
+	public int coalToWin = 3;
+	public int goldToWin = 3;
+	public int ironToWin = 3;
+	public int woodToWin = 10;
+
 	public ResourcePool() {
 
-		this.FoodPool = 15;
-		this.CoalPool = 10;
-		this.GoldPool = 5;
+		this.FoodPool = 0;
+		this.CoalPool = 0;
+		this.GoldPool = 0;
 		this.WoodPool = 0;
 		this.IronPool = 0;
 

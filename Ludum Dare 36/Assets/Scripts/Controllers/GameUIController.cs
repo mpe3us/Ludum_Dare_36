@@ -27,6 +27,13 @@ public class GameUIController : MonoBehaviour {
 	[SerializeField]
 	private GameObject resourcePoolPanel;
 
+	[SerializeField]
+	private GameObject overlayUI;
+	[SerializeField]
+	private GameObject defeatPanel;
+	[SerializeField]
+	private GameObject victoryPanel;
+
 	void Awake() {
 		if (Instance != null) {
 			Debug.LogError ("There should only be one GameUIController");
@@ -80,5 +87,16 @@ public class GameUIController : MonoBehaviour {
 		this.curSelectedObject = null;
 		Destroy (this.currentObjectInfo);
 	}
+
+	public void GameOver() {
+		this.overlayUI.SetActive (true);
+		this.defeatPanel.SetActive (true);
+	}
+
+	public void GameWon() {
+		this.overlayUI.SetActive (true);
+		this.victoryPanel.SetActive (true);
+	}
+
 
 }

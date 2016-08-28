@@ -51,10 +51,12 @@
      <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
      <Compile Include="Assets\Scripts\Controllers\GameUIController.cs" />
      <Compile Include="Assets\Scripts\Controllers\HomeBaseController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\MainMenuController.cs" />
      <Compile Include="Assets\Scripts\Controllers\MouseController.cs" />
      <Compile Include="Assets\Scripts\Controllers\ResourceController.cs" />
      <Compile Include="Assets\Scripts\Controllers\UnitController.cs" />
      <Compile Include="Assets\Scripts\DataModel\Apparel.cs" />
+     <Compile Include="Assets\Scripts\DataModel\Barbarian.cs" />
      <Compile Include="Assets\Scripts\DataModel\Cube.cs" />
      <Compile Include="Assets\Scripts\DataModel\CubeMap.cs" />
      <Compile Include="Assets\Scripts\DataModel\Game.cs" />

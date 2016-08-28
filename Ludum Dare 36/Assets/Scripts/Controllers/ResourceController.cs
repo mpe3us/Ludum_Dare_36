@@ -41,7 +41,7 @@ public class ResourceController : MonoBehaviour {
 
 		curProgress += unitCon.UnitData.GatheringSkill * Time.deltaTime;
 
-		Debug.Log ("Current resource progress for " + Name + ": " + curProgress);
+		//Debug.Log ("Current resource progress for " + Name + ": " + curProgress);
 
 		if (curProgress >= requiredProgress) {
 			returnObject.resPrefab = this.ResourcePrefab;
